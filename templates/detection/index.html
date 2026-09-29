@@ -1,0 +1,170 @@
+{% extends 'detection/base.html' %}
+{% load static %}
+
+{% block title %}Home - AI-Based Detection of Cyber Threats in Unidirectional IP Traffic{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-badge">
+            <span>⚡ AI-Driven Cybersecurity System</span>
+        </div>
+        <h1 class="hero-title">
+            AI-Based Detection of Cyber Threats in Unidirectional IP Traffic
+        </h1>
+        <p class="hero-desc">
+            An AI-based network security system that analyzes IP traffic patterns and detects potential cyber threats using machine learning.
+        </p>
+        <div class="hero-actions">
+            <a href="{% url 'detect_threat' %}" class="btn btn-primary" id="hero-start-detection-btn">
+                <span>🛡️</span> Start Detection
+            </a>
+            <a href="#about-section" class="btn btn-secondary" id="hero-learn-more-btn">
+                <span>📖</span> Learn More
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-subtitle">Workflow Architecture</div>
+            <h2 class="section-title">How The Detection System Works</h2>
+        </div>
+
+        <div class="pipeline-container">
+            <div class="pipeline-step">
+                <div class="step-num">1</div>
+                <div class="step-title">Network Traffic</div>
+                <div class="step-desc">Unidirectional IP stream capture</div>
+            </div>
+
+            <div class="pipeline-arrow">&rarr;</div>
+
+            <div class="pipeline-step">
+                <div class="step-num">2</div>
+                <div class="step-title">Feature Input</div>
+                <div class="step-desc">Protocol, duration, bytes & rates</div>
+            </div>
+
+            <div class="pipeline-arrow">&rarr;</div>
+
+            <div class="pipeline-step">
+                <div class="step-num">3</div>
+                <div class="step-title">Data Preprocessing</div>
+                <div class="step-desc">Imputation & One-Hot Encoding</div>
+            </div>
+
+            <div class="pipeline-arrow">&rarr;</div>
+
+            <div class="pipeline-step">
+                <div class="step-num">4</div>
+                <div class="step-title">ML Classifier</div>
+                <div class="step-desc">Trained Random Forest model</div>
+            </div>
+
+            <div class="pipeline-arrow">&rarr;</div>
+
+            <div class="pipeline-step">
+                <div class="step-num">5</div>
+                <div class="step-title">Threat Detection</div>
+                <div class="step-desc">Binary classification & confidence</div>
+            </div>
+
+            <div class="pipeline-arrow">&rarr;</div>
+
+            <div class="pipeline-step" style="border-color: var(--primary-cyan);">
+                <div class="step-num">6</div>
+                <div class="step-title">Normal / Attack</div>
+                <div class="step-desc">Instant real-time security verdict</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Project Section -->
+<section class="section" id="about-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-subtitle">Project Overview</div>
+            <h2 class="section-title">About The Project</h2>
+        </div>
+
+        <div class="grid-3">
+            <!-- Problem -->
+            <div class="card">
+                <div class="card-icon">⚠️</div>
+                <h3 class="card-title">Problem Statement</h3>
+                <p class="card-text">
+                    Cyber threats can be hidden within complex network traffic and may be difficult to identify manually. Modern attackers leverage sophisticated, high-speed unidirectional packet flows, making traditional rule-based firewalls insufficient.
+                </p>
+            </div>
+
+            <!-- Solution -->
+            <div class="card">
+                <div class="card-icon">💡</div>
+                <h3 class="card-title">Proposed Solution</h3>
+                <p class="card-text">
+                    The system uses machine learning to analyze network traffic features and classify traffic as normal or malicious. By analyzing statistical flow metrics, transmission rates, and TCP dynamics, threats are flagged in real-time.
+                </p>
+            </div>
+
+            <!-- Dataset & Model -->
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title">Dataset & AI Model</h3>
+                <p class="card-text">
+                    Trained on the comprehensive <strong>UNSW-NB15</strong> cybersecurity benchmark dataset using a high-precision <strong>Random Forest Classifier</strong> model trained in Google Colab, leveraging scikit-learn pipelines.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technologies Section -->
+<section class="section" style="background: rgba(15, 26, 54, 0.4);">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-subtitle">Stack</div>
+            <h2 class="section-title">Technologies Used</h2>
+        </div>
+
+        <div class="grid-4">
+            <div class="card" style="padding: 1.5rem;">
+                <div class="card-icon">🐍</div>
+                <h4 class="card-title" style="font-size: 1.1rem;">Python & Django</h4>
+                <p class="card-text" style="font-size: 0.85rem;">
+                    Robust web backend handling HTTP requests, input validation, and serving ML inference.
+                </p>
+            </div>
+
+            <div class="card" style="padding: 1.5rem;">
+                <div class="card-icon">🌲</div>
+                <h4 class="card-title" style="font-size: 1.1rem;">Random Forest</h4>
+                <p class="card-text" style="font-size: 0.85rem;">
+                    Ensemble machine learning classifier trained to differentiate benign flows from malicious attacks.
+                </p>
+            </div>
+
+            <div class="card" style="padding: 1.5rem;">
+                <div class="card-icon">⚙️</div>
+                <h4 class="card-title" style="font-size: 1.1rem;">Scikit-learn & Joblib</h4>
+                <p class="card-text" style="font-size: 0.85rem;">
+                    Pre-trained ColumnTransformer pipeline for categorical encoding and model persistence.
+                </p>
+            </div>
+
+            <div class="card" style="padding: 1.5rem;">
+                <div class="card-icon">🎨</div>
+                <h4 class="card-title" style="font-size: 1.1rem;">HTML, CSS & JS</h4>
+                <p class="card-text" style="font-size: 0.85rem;">
+                    Clean, responsive cybersecurity dashboard styled with native CSS and vanilla JavaScript.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'detection/base.html' %}
+{% load static %}
+
+{% block title %}Traffic Threat Detection Form - AI Cyber Threat Detector{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 2.5rem;">
+    <div class="container">
+
+        <!-- Form Header Box -->
+        <div class="form-header-box">
+            <h1 class="form-header-title">Unidirectional IP Traffic Analysis</h1>
+            <p class="form-header-desc">
+                Enter the network traffic flow metrics below. The AI Random Forest classifier and preprocessor will analyze the data stream to determine if it is <strong>NORMAL</strong> or an <strong>ATTACK</strong>.
+            </p>
+
+            <!-- Quick Presets for Demo / Viva Testing -->
+            <div class="preset-bar">
+                <span class="preset-label">Demo Quick Presets:</span>
+                <button type="button" class="preset-btn" data-preset="normal_dns" id="btn-preset-dns">
+                    ✅ Normal DNS Stream
+                </button>
+                <button type="button" class="preset-btn" data-preset="normal_web" id="btn-preset-web">
+                    ✅ Normal Web Browsing
+                </button>
+                <button type="button" class="preset-btn preset-attack" data-preset="attack_exploit" id="btn-preset-attack">
+                    ⚠️ Malicious Attack (DoS/Exploit)
+                </button>
+                <button type="button" class="preset-btn preset-reset" id="btn-reset-form">
+                    🔄 Reset Form
+                </button>
+            </div>
+        </div>
+
+        {% if error_message %}
+        <div class="alert-error" id="error-alert">
+            <span>⚠️</span>
+            <span>{{ error_message }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Traffic Feature Form -->
+        <form method="POST" action="{% url 'detect_threat' %}" id="threat-detection-form" novalidate>
+            {% csrf_token %}
+
+            <!-- Group 1: Protocol & Connection Identification -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <div class="form-section-title">
+                    <span>🌐</span> 1. Connection & Protocol Features
+                </div>
+                <div class="form-grid">
+                    {% for feat in features %}
+                        {% if feat.category == 'connection' %}
+                        <div class="form-group">
+                            <label for="id_{{ feat.name }}" class="form-label">
+                                {{ feat.label }}
+                            </label>
+                            <select name="{{ feat.name }}" id="id_{{ feat.name }}" class="form-control" required>
+                                {% for opt in feat.options %}
+                                <option value="{{ opt }}" {% if opt == feat.default %}selected{% endif %}>
+                                    {{ opt }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <span class="form-help">{{ feat.help }}</span>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Group 2: Flow Duration, Transmission Rates & Jitter -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <div class="form-section-title">
+                    <span>⏱️</span> 2. Duration, Rates & Inter-Packet Jitter
+                </div>
+                <div class="form-grid">
+                    {% for feat in features %}
+                        {% if feat.category == 'timing' %}
+                        <div class="form-group">
+                            <label for="id_{{ feat.name }}" class="form-label">
+                                <span>{{ feat.label }}</span>
+                                {% if feat.unit %}<span class="unit-tag">{{ feat.unit }}</span>{% endif %}
+                            </label>
+                            <input 
+                                type="number" 
+                                name="{{ feat.name }}" 
+                                id="id_{{ feat.name }}" 
+                                class="form-control" 
+                                step="{{ feat.step }}" 
+                                min="{{ feat.min }}" 
+                                value="{{ feat.default }}" 
+                                required
+                            >
+                            <span class="form-help">{{ feat.help }}</span>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Group 3: Bytes Transferred & Bandwidth Loads -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <div class="form-section-title">
+                    <span>📦</span> 3. Byte Counts & Bandwidth Load
+                </div>
+                <div class="form-grid">
+                    {% for feat in features %}
+                        {% if feat.category == 'bandwidth' %}
+                        <div class="form-group">
+                            <label for="id_{{ feat.name }}" class="form-label">
+                                <span>{{ feat.label }}</span>
+                                {% if feat.unit %}<span class="unit-tag">{{ feat.unit }}</span>{% endif %}
+                            </label>
+                            <input 
+                                type="number" 
+                                name="{{ feat.name }}" 
+                                id="id_{{ feat.name }}" 
+                                class="form-control" 
+                                step="{{ feat.step }}" 
+                                min="{{ feat.min }}" 
+                                value="{{ feat.default }}" 
+                                required
+                            >
+                            <span class="form-help">{{ feat.help }}</span>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Group 4: TCP Handshake & Sequence Dynamics -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <div class="form-section-title">
+                    <span>🔄</span> 4. TCP Sequence & Round-Trip Dynamics
+                </div>
+                <div class="form-grid">
+                    {% for feat in features %}
+                        {% if feat.category == 'tcp' %}
+                        <div class="form-group">
+                            <label for="id_{{ feat.name }}" class="form-label">
+                                <span>{{ feat.label }}</span>
+                                {% if feat.unit %}<span class="unit-tag">{{ feat.unit }}</span>{% endif %}
+                            </label>
+                            <input 
+                                type="number" 
+                                name="{{ feat.name }}" 
+                                id="id_{{ feat.name }}" 
+                                class="form-control" 
+                                step="{{ feat.step }}" 
+                                min="{{ feat.min }}" 
+                                value="{{ feat.default }}" 
+                                required
+                            >
+                            <span class="form-help">{{ feat.help }}</span>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div style="text-align: center; margin-top: 1.5rem; margin-bottom: 3rem;">
+                <button type="submit" class="btn btn-primary" id="btn-submit-analysis" style="font-size: 1.15rem; padding: 1rem 3rem;">
+                    <span>⚡</span> Analyze Traffic
+                </button>
+            </div>
+        </form>
+
+    </div>
+</section>
+{% endblock %}

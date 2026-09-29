@@ -1,0 +1,148 @@
+{% extends 'detection/base.html' %}
+{% load static %}
+
+{% block title %}Traffic Analysis Result - AI-Based Cyber Threat Detection{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 2.5rem;">
+    <div class="container">
+
+        {% if prediction_label %}
+        <!-- Result Card with Distinct Styling for NORMAL vs ATTACK -->
+        <div class="result-card {{ status_class }}">
+            <div class="result-header">
+                
+                <!-- Status Badge -->
+                <div class="result-status-badge">
+                    {% if status == 'ATTACK' %}
+                        <span>🚨</span> {{ badge_text }}
+                    {% else %}
+                        <span>✅</span> {{ badge_text }}
+                    {% endif %}
+                </div>
+
+                <!-- Exact Title & Format Required -->
+                <h1 style="font-size: 1.25rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.75rem;">
+                    Traffic Analysis Result
+                </h1>
+
+                <div style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 0.25rem; font-weight: 600;">
+                    Prediction:
+                </div>
+
+                <div class="result-title" id="prediction-result-title">
+                    {{ prediction_label }}
+                </div>
+
+                <!-- Exact Confidence Display Required -->
+                {% if confidence is not None %}
+                <div class="result-confidence-box">
+                    <div class="confidence-metric">
+                        <div class="confidence-val">Confidence: {{ confidence }}%</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Probability Distribution Breakdown -->
+            {% if prob_normal is not None and prob_attack is not None %}
+            <div class="prob-container">
+                <div style="text-align: center; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">
+                    Model Probability Breakdown
+                </div>
+
+                <!-- Normal Probability Bar -->
+                <div class="prob-row">
+                    <div class="prob-meta">
+                        <span style="color: var(--color-normal);">Normal Class Probability</span>
+                        <span>{{ prob_normal }}%</span>
+                    </div>
+                    <div class="prob-track">
+                        <div class="prob-fill prob-fill-normal" style="width: {{ prob_normal }}%;"></div>
+                    </div>
+                </div>
+
+                <!-- Attack Probability Bar -->
+                <div class="prob-row" style="margin-top: 1rem;">
+                    <div class="prob-meta">
+                        <span style="color: var(--color-attack);">Attack Class Probability</span>
+                        <span>{{ prob_attack }}%</span>
+                    </div>
+                    <div class="prob-track">
+                        <div class="prob-fill prob-fill-attack" style="width: {{ prob_attack }}%;"></div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Intelligence / Recommendations Panels -->
+            <div class="result-info-grid">
+                <div class="info-panel">
+                    <div class="info-panel-title">🛡️ Traffic Assessment</div>
+                    <p class="info-panel-text">{{ summary_text }}</p>
+                </div>
+                <div class="info-panel">
+                    <div class="info-panel-title">⚙️ Security Advisory</div>
+                    <p class="info-panel-text">{{ recommendation }}</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
+                <a href="{% url 'detect_threat' %}" class="btn btn-primary" id="btn-analyze-another">
+                    <span>🔄</span> Analyze Another Traffic
+                </a>
+                <a href="{% url 'index' %}" class="btn btn-secondary" id="btn-back-home">
+                    <span>🏠</span> Back to Home
+                </a>
+            </div>
+        </div>
+
+        <!-- Submitted Features Summary Table -->
+        {% if feature_summary %}
+        <div class="table-box">
+            <h2 class="table-title">Submitted Traffic Feature Summary</h2>
+            <div class="feature-table-wrapper">
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Feature Name</th>
+                            <th>Parameter Code</th>
+                            <th>Value</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feat in feature_summary %}
+                        <tr>
+                            <td style="color: var(--text-dim);">{{ forloop.counter }}</td>
+                            <td><strong>{{ feat.label }}</strong></td>
+                            <td style="font-family: var(--font-mono); color: var(--primary-blue);">{{ feat.name }}</td>
+                            <td class="val-cell">{{ feat.value }}</td>
+                            <td style="color: var(--text-muted);">{{ feat.unit|default:'-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- Fallback if accessed directly without submission -->
+        <div class="card" style="text-align: center; padding: 3rem 1.5rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+            <h2 style="margin-bottom: 0.75rem;">No Traffic Analysis Data</h2>
+            <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 1.5rem;">
+                Please submit network traffic features through the detection form to view threat classification and confidence score.
+            </p>
+            <a href="{% url 'detect_threat' %}" class="btn btn-primary">
+                <span>🛡️</span> Go to Detection Form
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}

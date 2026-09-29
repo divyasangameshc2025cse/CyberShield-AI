@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI-Based Detection of Cyber Threats in Unidirectional IP Traffic{% endblock %}</title>
+    <meta name="description" content="An AI-based network security system that analyzes IP traffic patterns and detects potential cyber threats using machine learning.">
+    <!-- Google Fonts for crisp typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom Cybersecurity Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body {% if scroll_to_about %}data-scroll-about="true"{% endif %}>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="{% url 'index' %}" class="nav-brand" id="nav-brand-link">
+                <span class="brand-icon">🛡️</span>
+                <span class="brand-text">Cyber<span>Shield</span> AI</span>
+            </a>
+            <ul class="nav-menu">
+                <li>
+                    <a href="{% url 'index' %}" class="nav-link {% if page == 'home' and not scroll_to_about %}active{% endif %}" id="nav-home">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'detect_threat' %}" class="nav-link {% if page == 'detect' or page == 'result' %}active{% endif %}" id="nav-detect">Detect Threat</a>
+                </li>
+                <li>
+                    <a href="{% url 'about' %}" class="nav-link {% if scroll_to_about %}active{% endif %}" id="nav-about">About</a>
+                </li>
+                <li>
+                    <a href="{% url 'detect_threat' %}" class="nav-link nav-cta" id="nav-start-btn">Start Detection</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Project Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">
+                <strong>AI-Based Detection of Cyber Threats in Unidirectional IP Traffic</strong>
+            </p>
+            <p class="footer-sub">
+                AIML College Project &bull; Powered by Random Forest ML Classifier &bull; UNSW-NB15 Benchmark
+            </p>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay Modal -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Analyzing Unidirectional IP Traffic Stream...</div>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Evaluating features through AI classification engine</p>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
